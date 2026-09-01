@@ -1,0 +1,23 @@
+[
+    {
+        "email": "hafsajakathi@gmail.com",
+        "password": "123456",
+        "validity": "valid"
+    },
+    {
+        "email": "hafsajakathi@gmail.com",
+        "password": "12345",
+        "validity": "invalid"
+    },
+    {
+        "email": "hafsa@gmail.com",
+        "password": "123456",
+        "validity": "invalid"
+
+    },
+    {
+        "email": "",
+        "password": "123456",
+        "validity": "invalid"
+    }
+]
