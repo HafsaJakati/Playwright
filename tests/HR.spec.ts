@@ -1,10 +1,14 @@
 import { test } from "@playwright/test";
 import { Loginpage } from "../pages/login";
-test("Login To Urbuddy", async ({ page }) => {
+import { HrModule } from "../pages/HR";
+
+test.beforeEach(async ({ page }) => {
     const login_page = new Loginpage(page);
     await login_page.gotologinpage();
     await login_page.login();
-    await page.waitForLoadState("domcontentloaded");
-    // await login_page.verifyloginsucess();
+});
 
-})
+test("creatingJob", async ({ page }) => {
+    const hr = new HrModule(page);
+    await hr.createJob();
+});

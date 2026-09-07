@@ -1,0 +1,11 @@
+ {
+  "addEmployeeData": {
+    "department": "Testers",
+    "designation": "QA Engineer",
+    "role": "Admin",
+    "qualification": "B.Tech",
+    "gender": "Male",
+    "bloodGroup": "A+"
+  },
+  "SearchEmpName": "Eden Walsh"
+}

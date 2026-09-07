@@ -1,23 +1,23 @@
 import { Page, Locator, expect } from "@playwright/test";
-export class payslip1 {
+export class PaySlip {
     readonly page: Page;
-    readonly payslipbtn: Locator;
-    readonly monthdd: Locator;
-    readonly errmsg: Locator;
+    readonly payslipBtn: Locator;
+    readonly monthDd: Locator;
+    readonly errMsg: Locator;
 
 
     constructor(page: Page) {
         this.page = page;
-        this.payslipbtn = page.locator("(//p[text()='Payslip'])[1]");
-        this.monthdd = page.locator("//select[@class='selectElement']").first();
-        this.errmsg = page.locator("//div[text()='Payslip not found']");
+        this.payslipBtn = page.getByRole("link", { name: "Payslip" });
+        this.monthDd = page.locator("//select[@class='selectElement']").first();
+        this.errMsg = page.locator("//div[text()='Payslip not found']");
     }
 
-    async payslip() {
-        await this.payslipbtn.click();
-        await this.monthdd.click();
-        await this.monthdd.selectOption({ label: "July" });
-        await expect(this.errmsg).toBeVisible();
+    async GeneratePayslip() {
+        await this.payslipBtn.click();
+        await this.monthDd.click();
+        await this.monthDd.selectOption({ label: "July" });
+        await expect(this.errMsg).toBeVisible();
     }
 
 

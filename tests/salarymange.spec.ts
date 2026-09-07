@@ -1,82 +1,69 @@
 import { test } from "@playwright/test";
-import { loginpage } from "../pages/login";
-import { salarymanagement } from "../pages/salaryM";
+import { Loginpage } from "../pages/login";
+import { SalaryManagement } from "../pages/salaryM";
+import * as fs from "fs";
+
+const filepath = "./testdata/SalaryManagement.json";
+const Salarydata = JSON.parse(fs.readFileSync(filepath, "utf-8"));
+
+test.beforeEach(async ({ page }) => {
+    const login_page = new Loginpage(page);
+    await login_page.gotologinpage();
+    await login_page.login();
+});
 
 
-test.describe("incentives", () => {
-    test("salarymanagement", async ({ page }) => {
-        const login_page = new loginpage(page);
-        const salary_management = new salarymanagement(page);
-        await login_page.gotologinpage();
-        await login_page.login("hafsajakathi@gmail.com", "123456");
-        await salary_management.addincentive("D0XVPd", "5000");
+test.describe("IncentivesTests", () => {
+    test("AddingIncentive", async ({ page }) => {
+        const salary_management = new SalaryManagement(page);
+        await salary_management.AddIncentive(Salarydata.EmployeeIdSM, Salarydata.AmountSM);
 
 
     })
 
-    test("cancelincentive", async ({ page }) => {
-        const login_page = new loginpage(page);
-        const salary_management = new salarymanagement(page);
-        await login_page.gotologinpage();
-        await login_page.login("hafsajakathi@gmail.com", "123456");
-        await salary_management.cancel("D0XVPd", "5000");
-        await page.waitForTimeout(5000);
-    })
-})
-test.describe("adddeduction", () => {
-    test("dd", async ({ page }) => {
-        const login_page = new loginpage(page);
-        const salary_management = new salarymanagement(page);
-        await login_page.gotologinpage();
-        await login_page.login("hafsajakathi@gmail.com", "123456");
-        await salary_management.deduction("EmpOne", "2000", "test reason");
-    })
+    test("CancelIncentive", async ({ page }) => {
 
-})
+        const salary_management = new SalaryManagement(page);
+        await salary_management.Cancel(Salarydata.EmployeeIdSM, Salarydata.AmountSM);
 
-test.describe("payroll", () => {
-    test.setTimeout(120000);
+    })
+});
+test.describe("AddDeductionTests", () => {
+    test("AddDeduction", async ({ page }) => {
+        const salary_management = new SalaryManagement(page);
+        await salary_management.AddDeduction(Salarydata.DeductionID, Salarydata.DeductionAmt, Salarydata.DeductionReason);
+    });
+
+});
+
+test.describe("PayrollTests", () => {
+
     test("generatepayroll", async ({ page }) => {
-        const login_page = new loginpage(page);
-        const salary_management = new salarymanagement(page);
-        await login_page.gotologinpage();
-        await login_page.login("hafsajakathi@gmail.com", "123456");
-        await salary_management.generatepayroll();
+        const salary_management = new SalaryManagement(page);
+        await salary_management.GeneratePayroll();
 
-    })
-})
+    });
+});
 
-test.describe("generatepayslip", () => {
-    test.setTimeout(150000);
+test.describe("PayslipTests", () => {
+
     test("genpayslip", async ({ page }) => {
-        const login_page = new loginpage(page);
-        const salary_management = new salarymanagement(page);
-        await login_page.gotologinpage();
-        await login_page.login("hafsajakathi@gmail.com", "123456");
-        await salary_management.payslip("EmpOne");
-    })
+        const salary_management = new SalaryManagement(page);
+        await salary_management.GeneratePayslip(Salarydata.PayslipId);
+    });
 
     test("payslipforallemp", async ({ page }) => {
-        const login_page = new loginpage(page);
-        const salary_management = new salarymanagement(page);
-        await login_page.gotologinpage();
-        await login_page.login("hafsajakathi@gmail.com", "123456");
-        await salary_management.allemppayslip("July 2026");
-    })
-})
-test("generateaudit", async ({ page }) => {
-    test.setTimeout(120000);
-    const login_page = new loginpage(page);
-    const salary_management = new salarymanagement(page);
-    await login_page.gotologinpage();
-    await login_page.login("hafsajakathi@gmail.com", "123456");
-    await salary_management.generateaudit();
+        const salary_management = new SalaryManagement(page);
+        await salary_management.AllEmployeesPayslip(Salarydata.AllEMployeesypayslipMonth);
+    });
+});
+test("GenerateAuditTests", async ({ page }) => {
+    const salary_management = new SalaryManagement(page);
+    await salary_management.GenerateAudit();
 })
 
-test("import_leaves", async ({ page }) => {
-    const login_page = new loginpage(page);
-    const salary_management = new salarymanagement(page);
-    await login_page.gotologinpage();
-    await login_page.login("hafsajakathi@gmail.com", "123456");
-    await salary_management.importleaves();
+test("ImportLeavesTests", async ({ page }) => {
+
+    const salary_management = new SalaryManagement(page);
+    await salary_management.ImportLeaves();
 })

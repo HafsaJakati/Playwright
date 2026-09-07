@@ -1,85 +1,89 @@
 import { Page, Locator } from "@playwright/test";
-export class salarymanagement {
+export class SalaryManagement {
     readonly page: Page;
-    readonly smbtn: Locator;
-    readonly addincentive_btn: Locator;
-    readonly enterempid: Locator;
-    readonly enteramt: Locator;
-    readonly submitbtn: Locator;
-    readonly cancelbtn: Locator;
-    readonly deductionbtn: Locator;
+    readonly smBtn: Locator;
+    readonly addIncentive_btn: Locator;
+    readonly enterEmpId: Locator;
+    readonly enterAmt: Locator;
+    readonly submitBtn: Locator;
+    readonly cancelBtn: Locator;
+    readonly deductionBtn: Locator;
     readonly empid: Locator;
-    readonly ddamt: Locator;
-    readonly ddreason: Locator;
-    readonly ddsubmitbtn: Locator;
-    readonly genpayroll: Locator;
-    readonly payslipbtn: Locator;
-    readonly ps_empid: Locator;
-    readonly ps_submitbtn: Locator;
-    readonly ps_allemp: Locator;
-    readonly ps_month: Locator;
-    readonly auditbtn: Locator;
-    readonly importbtn: Locator;
-    readonly uploadbtn: Locator;
-    readonly filesubmit: Locator;
+    readonly ddAmt: Locator;
+    readonly ddReason: Locator;
+    readonly ddSubmitBtn: Locator;
+    readonly genPayroll: Locator;
+    readonly payslipBtn: Locator;
+    readonly ps_EmpId: Locator;
+    readonly ps_SubmitBtn: Locator;
+    readonly ps_AllEmp: Locator;
+    readonly ps_Month: Locator;
+    readonly auditBtn: Locator;
+    readonly importBtn: Locator;
+    readonly uploadBtn: Locator;
+    readonly fileSubmit: Locator;
+    readonly IncentiveStatus: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.smbtn = page.locator("(//p[text()='Salary Management'])[1]");
-        this.addincentive_btn = page.getByText("Add Incentive");
-        this.enterempid = page.locator("//input[@name='empId']");
-        this.enteramt = page.locator("//input[@name='amount']");
-        this.submitbtn = page.getByText("Submit");
-        this.cancelbtn = page.getByText("Cancel");
-        this.deductionbtn = page.getByRole("button", { name: "Add Deduction" });
+        this.smBtn = page.getByRole("link", { name: "Salary Management" });
+        this.addIncentive_btn = page.getByText("Add Incentive");
+        this.enterEmpId = page.locator("//input[@name='empId']");
+        this.enterAmt = page.locator("//input[@name='amount']");
+        this.submitBtn = page.getByText("Submit");
+        this.cancelBtn = page.getByText("Cancel");
+        this.deductionBtn = page.getByRole("button", { name: "Add Deduction" });
         this.empid = page.locator("//input[@name='empId']");
-        this.ddamt = page.locator("//input[@name='amount']");
-        this.ddreason = page.locator("//textarea[@name='reason']");
-        this.ddsubmitbtn = page.getByRole("button", { name: "Submit" });
-        this.genpayroll = page.getByRole("button", { name: "Generate Payroll" });
-        this.payslipbtn = page.getByRole("button", { name: "Generate Payslip" });
-        this.ps_empid = page.locator("//input[@id='EmpID']");
-        this.ps_submitbtn = page.getByText("Submit");
-        this.ps_allemp = page.getByRole("radio", { name: "All Employees" });
-        this.ps_month = page.locator("//input[@id='date']");
-        this.auditbtn = page.getByText("Generate Audit");
-        this.importbtn = page.getByRole("button", { name: "Import Leaves" });
-        this.uploadbtn = page.locator("//label[@id='uploadBtn']");
-        this.filesubmit = page.getByRole("button", { name: "Submit" });
+        this.ddAmt = page.locator("//input[@name='amount']");
+        this.ddReason = page.locator("//textarea[@name='reason']");
+        this.ddSubmitBtn = page.getByRole("button", { name: "Submit" });
+        this.genPayroll = page.getByRole("button", { name: "Generate Payroll" });
+        this.payslipBtn = page.getByRole("button", { name: "Generate Payslip" });
+        this.ps_EmpId = page.locator("//input[@id='EmpID']");
+        this.ps_SubmitBtn = page.getByText("Submit");
+        this.ps_AllEmp = page.getByRole("radio", { name: "All Employees" });
+        this.ps_Month = page.locator("//input[@id='date']");
+        this.auditBtn = page.getByText("Generate Audit");
+        this.importBtn = page.getByRole("button", { name: "Import Leaves" });
+        this.uploadBtn = page.locator("//label[@id='uploadBtn']");
+        this.fileSubmit = page.getByRole("button", { name: "Submit" });
+        this.IncentiveStatus = page.locator("//div[@role='status']");
     }
-    async addincentive(emp_id: string, amt: string) {
-        await this.smbtn.click();
-        await this.addincentive_btn.click();
-        await this.enterempid.fill(emp_id);
-        await this.enteramt.fill(amt);
-        await this.submitbtn.click();
+    async AddIncentive(emp_id: string, amt: string) {
+        await this.smBtn.click();
+        await this.addIncentive_btn.click();
+        await this.enterEmpId.fill(emp_id);
+        await this.enterAmt.fill(amt);
+        await this.submitBtn.click();
+        await this.IncentiveStatus.waitFor({ state: "visible" });
 
 
-    }
-
-    async cancel(emp_id: string, amt: string) {
-        await this.smbtn.click();
-        await this.addincentive_btn.click();
-        await this.enterempid.fill(emp_id);
-        await this.enteramt.fill(amt);
-        await this.cancelbtn.click();
     }
 
-    async deduction(enterid: string, enterddamt: string, enterreason: string) {
+    async Cancel(emp_id: string, amt: string) {
+        await this.smBtn.click();
+        await this.addIncentive_btn.click();
+        await this.enterEmpId.fill(emp_id);
+        await this.enterAmt.fill(amt);
+        await this.cancelBtn.click();
+    }
+
+    async AddDeduction(enterid: string, enterddamt: string, enterreason: string) {
         //enterreason:string
-        await this.smbtn.click();
-        await this.deductionbtn.click();
+        await this.smBtn.click();
+        await this.deductionBtn.click();
         await this.empid.fill(enterid);
-        await this.ddamt.fill(enterddamt);
-        await this.ddreason.click();
-        await this.ddreason.fill(enterreason);
-        await this.ddsubmitbtn.click();
+        await this.ddAmt.fill(enterddamt);
+        await this.ddReason.click();
+        await this.ddReason.fill(enterreason);
+        await this.ddSubmitBtn.click();
 
     }
-    async generatepayroll() {
-        await this.smbtn.click();
+    async GeneratePayroll() {
+        await this.smBtn.click();
+        await this.page.waitForLoadState("domcontentloaded");
         const downloadPromise = this.page.waitForEvent("download", { timeout: 120000 });
-        await this.genpayroll.click();
+        await this.genPayroll.click();
         const download = await downloadPromise;
         await download.path();
         console.log(await download.suggestedFilename());
@@ -87,39 +91,39 @@ export class salarymanagement {
 
     }
 
-    async payslip(enter_id: string) {
-        await this.smbtn.click();
-        await this.payslipbtn.click();
-        await this.ps_empid.fill(enter_id);
-        await this.ps_submitbtn.click();
+    async GeneratePayslip(enter_id: string) {
+        await this.smBtn.click();
+        await this.payslipBtn.click();
+        await this.ps_EmpId.fill(enter_id);
+        await this.ps_SubmitBtn.click();
     }
 
-    async allemppayslip(entermonth: string) {
-        await this.smbtn.click();
-        await this.payslipbtn.click();
-        await this.ps_allemp.click();
-        await this.ps_month.click();
-        await this.ps_month.fill(entermonth);
-        await this.ps_submitbtn.click()
+    async AllEmployeesPayslip(entermonth: string) {
+        await this.smBtn.click();
+        await this.payslipBtn.click();
+        await this.ps_AllEmp.click();
+        await this.ps_Month.click();
+        await this.ps_Month.fill(entermonth);
+        await this.ps_SubmitBtn.click()
         // const [download] = await Promise.all([
         //     this.page.waitForEvent("download", { timeout: 120000 }),]);
         // console.log("Downloaded:", await download.suggestedFilename());
     }
 
-    async generateaudit() {
-        await this.smbtn.click();
-        await this.auditbtn.click();
+    async GenerateAudit() {
+        await this.smBtn.click();
+        await this.auditBtn.click();
         const [download] = await Promise.all([
             this.page.waitForEvent("download", { timeout: 120000 }),]);
         console.log("Downloaded:", await download.suggestedFilename());
     }
 
-    async importleaves() {
-        await this.smbtn.click();
-        await this.importbtn.click();
-        await this.uploadbtn.click();
-        await this.uploadbtn.setInputFiles("C:\\Users\\Admin\\Downloads\\Untitled spreadsheet.xlsx");
-        await this.filesubmit.click();
-        
+    async ImportLeaves() {
+        await this.smBtn.click();
+        await this.importBtn.click();
+        await this.uploadBtn.click();
+        await this.uploadBtn.setInputFiles("C:\\Users\\Admin\\Downloads\\ImportLeavesFile.xlsx");
+        await this.fileSubmit.click();
+
     }
 }

@@ -1,56 +1,38 @@
-import{test}from"@playwright/test"
-import { loginpage } from "../pages/login";
-import { addingemploye } from "../pages/addemp";
-import{faker}from"@faker-js/faker";
-// generate the test data 
-const empdata={
-firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        employeeId: faker.string.alphanumeric(6),
-        email: faker.internet.email(),
-        personalEmail: faker.internet.email(),
-        password: faker.internet.password(),
-        experience: faker.number.int({ min: 1, max: 10 }).toString(),
-        department: "Testers",
-        mobileNumber: faker.string.numeric(10),
-        designation: "QA Engineer",
-        salary: faker.number.int({ min: 20000, max: 80000 }).toString(),
-        locationemp:faker.location.city()
-        //location: "Hyderabad"
-};
- 
-test("login",async({page})=>{
-    const login_page=new loginpage(page);
-    const e=new addingemploye(page);
-    await login_page.gotologinpage();
-    await login_page.login("hafsajakathi@gmail.com","123456");
-//     await e.addemployee("qwerty","xyzabc","e45","abc@gmail.com","personal@gmail.com",
-//         "7418785","26","Testers","7859654287","QA eng","20000","hyderabad");
-await e.addemployee(
-        empdata.firstName,
-        empdata.lastName,
-        empdata.employeeId,
-        empdata.email,
-        empdata.personalEmail,
-        empdata.password,
-        empdata.experience,
-        empdata.department,
-        empdata.mobileNumber,
-        empdata.designation,
-        empdata.salary,
-        empdata.locationemp
-    );
-    await page.waitForTimeout(5000);
-    await e.searchemployee(empdata.firstName);
-    await page.waitForTimeout(5000);
+import { test } from "@playwright/test"
+import { Loginpage } from "../pages/login";
+import { AddingEmploye } from "../pages/addemp";
+import { generateEmployeeData } from "../testdata/Testgenerator";
+import *as fs from "fs";
 
+const filepath = "C:\\Users\\Admin\\Playwright\\playwright-typescript\\testdata\\Employees.json";
+const EmployeeNameSearch = JSON.parse(fs.readFileSync(filepath, "utf-8"));
+
+
+test.beforeEach(async ({ page }) => {
+    const login_page = new Loginpage(page);
+    await login_page.gotologinpage();
+    await login_page.login();
+});
+
+test("Add Employee", async ({ page }) => {
+
+    const e = new AddingEmploye(page);
+    const empdata = generateEmployeeData();
+    await e.addemployee({ ...empdata });
+    await page.waitForLoadState("domcontentloaded");
+    await e.searchemployee(empdata.firstName);
 
 });
 
-test("checkfieldvalidation error",async({page})=>{
-     const login_page=new loginpage(page);
-    const e=new addingemploye(page);
-    await login_page.gotologinpage();
-    await login_page.login("hafsajakathi@gmail.com","123456");
+test("Search Employee", async ({ page }) => {
+    const e = new AddingEmploye(page);
+    await page.waitForLoadState("domcontentloaded");
+    await e.searchemployee(EmployeeNameSearch.SearchEmpName);
+});
+
+
+test("checkfieldvalidation error", async ({ page }) => {
+    const e = new AddingEmploye(page);
+
 })
 

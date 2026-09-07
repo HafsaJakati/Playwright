@@ -1,29 +1,42 @@
 import { test } from "@playwright/test";
 import { ResourcetrackingPage } from "../pages/resourcetracking";
-import { loginpage } from "../pages/login";
+import { Loginpage } from "../pages/login";
+import * as fs from "fs";
+const filepath = "./testdata/ResourceTracking.json";
+const ResourceTdata = JSON.parse(fs.readFileSync(filepath, "utf-8"));
 test.beforeEach(async ({ page }) => {
-    const login_page = new loginpage(page);
+    const login_page = new Loginpage(page);
     await login_page.gotologinpage();
-    await login_page.login("hafsajakathi@gmail.com", "123456");
+    await login_page.login();
 });
-test("Resource_tracking", async ({ page }) => {
+test("ADDResource_tracking", async ({ page }) => {
     const rt = new ResourcetrackingPage(page);
-    await rt.gotoresourcetrackingpage("10016", "testmodel16");
+    await rt.AddResource(ResourceTdata.AddresourceDate, ResourceTdata.ResourceserialID, ResourceTdata.ResourceModel);
 });
 test("Assign_resource", async ({ page }) => {
     const rt = new ResourcetrackingPage(page);
-    await rt.assignresource("16", "testro001");
-    await page.waitForTimeout(4000);
+    await rt.assignResource(ResourceTdata.AssignresourceDate, ResourceTdata.AssigningmodelName, ResourceTdata.AssigningEmpid);
 });
+test("AssignStatus", async ({ page }) => {
+    const rt = new ResourcetrackingPage(page);
+    await rt.CheckAssignStatus(ResourceTdata.AssigningmodelName)
+})
 
 test("Release_resource", async ({ page }) => {
     const rt = new ResourcetrackingPage(page);
-    await rt.releaseaddedresource("16");
+    await rt.releaseAddedResource(ResourceTdata.ReleaseresourceModel);
+
+});
+
+test("ReleaseStatus", async ({ page }) => {
+    const rt = new ResourcetrackingPage(page);
+    rt.CheckReleseStatus(ResourceTdata.ReleaseresourceModel)
+
 });
 
 test("Import_resource", async ({ page }) => {
     const rt = new ResourcetrackingPage(page);
-    await rt.importresource("first");
+    await rt.importResource("first");
 });
 test("DeviceTypeFilter", async ({ page }) => {
     const rt = new ResourcetrackingPage(page);
